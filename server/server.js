@@ -19,7 +19,6 @@ import certificateRoutes from './routes/certificate.routes.js';
 import notificationRoutes from './routes/notification.routes.js';
 import quizRoutes from './routes/quiz.routes.js';
 import analyticsRoutes from './routes/analytics.routes.js';
-import adminRoutes from './routes/admin.routes.js';
 import uploadRoutes from './routes/upload.routes.js';
 
 // Start notification background worker inline (or run separately: node workers/notification.worker.js)
@@ -84,7 +83,6 @@ app.use('/api/certificates', certificateRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/quizzes', quizRoutes);
 app.use('/api/analytics', analyticsRoutes);
-app.use('/api/admin', adminRoutes);
 app.use('/api/uploads', uploadRoutes);
 
 app.get('/api/health', (req, res) => {

@@ -71,31 +71,31 @@ export default function Layout() {
       label: 'Dashboard', 
       to: '/dashboard', 
       icon: LayoutDashboard,
-      roles: ['STUDENT', 'TEACHER', 'ADMIN']
+      roles: ['STUDENT', 'TEACHER']
     },
     { 
       label: 'Courses', 
       to: '/courses', 
       icon: BookOpen,
-      roles: ['STUDENT', 'TEACHER', 'ADMIN']
+      roles: ['STUDENT', 'TEACHER']
     },
     {
       label: 'Live Classes',
       to: '/live-classes',
       icon: Video,
-      roles: ['STUDENT', 'TEACHER', 'ADMIN']
+      roles: ['STUDENT', 'TEACHER']
     },
     {
       label: 'Assignments',
       to: '/assignments',
       icon: FileText,
-      roles: ['STUDENT', 'TEACHER', 'ADMIN']
+      roles: ['STUDENT', 'TEACHER']
     },
     {
       label: 'Students',
       to: '/students',
       icon: Users,
-      roles: ['TEACHER', 'ADMIN']
+      roles: ['TEACHER']
     },
     {
       label: 'My Progress',
@@ -104,34 +104,28 @@ export default function Layout() {
       roles: ['STUDENT']
     },
     {
-      label: 'AI Generator',
-      to: '/ai-generator',
-      icon: Sparkles,
-      roles: ['TEACHER', 'ADMIN']
-    },
-    {
       label: 'Analytics',
       to: '/analytics',
       icon: BarChart3,
-      roles: ['TEACHER', 'ADMIN']
+      roles: ['TEACHER']
     },
     {
       label: 'Certificates',
       to: '/certificates',
       icon: Award,
-      roles: ['STUDENT', 'TEACHER', 'ADMIN']
+      roles: ['STUDENT', 'TEACHER']
     },
     {
       label: 'Forum',
       to: '/forum',
       icon: MessageSquareText,
-      roles: ['STUDENT', 'TEACHER', 'ADMIN']
+      roles: ['STUDENT', 'TEACHER']
     },
     {
       label: 'AI Mentor',
       to: '/ai-mentor',
       icon: Bot,
-      roles: ['STUDENT', 'ADMIN']
+      roles: ['STUDENT']
     }
   ];
 

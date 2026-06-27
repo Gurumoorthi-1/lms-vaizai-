@@ -13,7 +13,6 @@ import CourseList from './pages/CourseList';
 import CourseDetail from './pages/CourseDetail';
 import AssignmentDetail from './pages/AssignmentDetail';
 import QuizDetail from './pages/QuizDetail';
-import AIGenerator from './pages/AIGenerator';
 
 // New Pages for Student Management & Dashboard
 import StudentList from './pages/StudentList';
@@ -110,17 +109,15 @@ function AppContent() {
             <Route path="courses/:id"                                      element={<CourseDetail />} />
             <Route path="courses/:id/assignments/:assignmentId"            element={<AssignmentDetail />} />
             <Route path="courses/:id/quiz/:quizId"                         element={<QuizDetail />} />
-            <Route path="ai-generator"                                     element={<ProtectedRoute allowedRoles={['TEACHER', 'ADMIN']}><AIGenerator /></ProtectedRoute>} />
-
             {/* Live Classes */}
             <Route path="live-classes"                                     element={<LiveClasses />} />
 
             {/* Assignments */}
             <Route path="assignments"                                      element={<Assignments />} />
 
-            {/* Student Management (Admin & Teacher only) */}
-            <Route path="students"     element={<ProtectedRoute allowedRoles={['TEACHER', 'ADMIN']}><StudentList /></ProtectedRoute>} />
-            <Route path="students/:id" element={<ProtectedRoute allowedRoles={['TEACHER', 'ADMIN']}><StudentProfile /></ProtectedRoute>} />
+            {/* Student Management (Teacher only) */}
+            <Route path="students"     element={<ProtectedRoute allowedRoles={['TEACHER']}><StudentList /></ProtectedRoute>} />
+            <Route path="students/:id" element={<ProtectedRoute allowedRoles={['TEACHER']}><StudentProfile /></ProtectedRoute>} />
 
             {/* Student Progress Dashboard (Student self-service) */}
             <Route path="my-progress"  element={<ProtectedRoute allowedRoles={['STUDENT']}><MyProgress /></ProtectedRoute>} />
@@ -131,8 +128,8 @@ function AppContent() {
             {/* AI Mentor Chat */}
             <Route path="ai-mentor" element={<ProtectedRoute><AIMentor /></ProtectedRoute>} />
 
-            {/* Analytics Dashboard (Teachers & Admins only) */}
-            <Route path="analytics" element={<ProtectedRoute allowedRoles={['TEACHER', 'ADMIN']}><AnalyticsDashboard /></ProtectedRoute>} />
+            {/* Analytics Dashboard (Teachers only) */}
+            <Route path="analytics" element={<ProtectedRoute allowedRoles={['TEACHER']}><AnalyticsDashboard /></ProtectedRoute>} />
 
             {/* Certificates Module */}
             <Route path="certificates" element={<ProtectedRoute><Certificates /></ProtectedRoute>} />
