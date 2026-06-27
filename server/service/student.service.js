@@ -111,7 +111,20 @@ export const studentService = {
     }
 
     const students = await studentRepository.findAllStudents(filters, skip, limit, sort);
-    return students.map(transformStudent);
+    
+    // For the list view, we don't need all the enrollment details - return basic info
+    return students.map(student => {
+      const obj = student.toObject ? student.toObject() : student;
+      return {
+        id: obj._id,
+        firstName: obj.firstName,
+        lastName: obj.lastName,
+        email: obj.email,
+        role: obj.role,
+        createdAt: obj.createdAt,
+        lastActiveAt: obj.lastActiveAt || obj.createdAt
+      };
+    });
   },
 
   getStudentProfile: async (id) => {
