@@ -14,6 +14,10 @@ export const enrollmentRepository = {
     return await Enrollment.find({ studentId }).populate('courseId', 'title thumbnail category duration').skip(skip).limit(limit);
   },
 
+  findByUserIds: async (studentIds) => {
+    return await Enrollment.find({ studentId: { $in: studentIds } });
+  },
+
   delete: async (studentId, courseId) => {
     return await Enrollment.findOneAndDelete({ studentId, courseId });
   },

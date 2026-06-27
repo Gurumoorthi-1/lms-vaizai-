@@ -112,9 +112,32 @@ export const studentService = {
 
     const students = await studentRepository.findAllStudents(filters, skip, limit, sort);
     
-    // For the list view, we don't need all the enrollment details - return basic info
+    // Fetch enrollments for all students to calculate progress
+    const studentIds = students.map(s => s._id);
+    const allEnrollments = await enrollmentRepository.findByUserIds(studentIds);
+    
+    // Create a map of student ID to their enrollments
+    const studentEnrollmentsMap = {};
+    allEnrollments.forEach(enrollment => {
+      const studentId = enrollment.studentId.toString();
+      if (!studentEnrollmentsMap[studentId]) {
+        studentEnrollmentsMap[studentId] = [];
+      }
+      studentEnrollmentsMap[studentId].push(enrollment);
+    });
+    
     return students.map(student => {
       const obj = student.toObject ? student.toObject() : student;
+      const studentId = obj._id.toString();
+      const enrollments = studentEnrollmentsMap[studentId] || [];
+      
+      // Calculate average progress
+      let averageProgress = 0;
+      if (enrollments.length > 0) {
+        const totalProgress = enrollments.reduce((sum, e) => sum + (e.progress || 0), 0);
+        averageProgress = Math.round(totalProgress / enrollments.length);
+      }
+      
       return {
         id: obj._id,
         firstName: obj.firstName,
@@ -122,7 +145,10 @@ export const studentService = {
         email: obj.email,
         role: obj.role,
         createdAt: obj.createdAt,
-        lastActiveAt: obj.lastActiveAt || obj.createdAt
+        lastActiveAt: obj.lastActiveAt || obj.createdAt,
+        coursesCount: enrollments.length,
+        averageProgress: averageProgress,
+        enrollments: [] // Empty array for backward compatibility
       };
     });
   },
