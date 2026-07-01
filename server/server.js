@@ -64,10 +64,10 @@ const httpServer = createServer(app);
 initSocket(httpServer);
 
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  'https://lms-vaizai.vercel.app',
-  'http://localhost:5173',
-  'http://localhost:4173'
+  process.env.FRONTEND_URL,              // Production Vercel URL
+  'https://lms-vaizai.vercel.app',       // Hardcoded Vercel Frontend fallback
+  'http://localhost:5173',               // Vite dev server
+  'http://localhost:4173'                // Vite preview
 ].filter(Boolean);
 
 app.use(cors({
