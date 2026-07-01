@@ -120,7 +120,7 @@ export default function OTPVerification() {
         {/* Resend success */}
         {resendSuccess && (
           <p className="text-center text-xs font-medium text-emerald-600 dark:text-emerald-400">
-            ✓ New OTP sent to {email}
+             New OTP sent to {email}
           </p>
         )}
 

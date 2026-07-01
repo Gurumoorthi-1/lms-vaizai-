@@ -1,7 +1,3 @@
-/**
- * Reset Password — Validates OTP from URL, shows new-password form
- * with live strength meter, then redirects to login on success.
- */
 import React, { useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
