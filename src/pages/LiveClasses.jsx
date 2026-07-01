@@ -32,6 +32,7 @@ import {
   ChevronUp
 } from 'lucide-react';
 import Modal from '../components/ui/Modal';
+import ConfirmationDialog from '../components/ui/ConfirmationDialog';
 import { Skeleton } from '../components/ui/Skeleton';
 import { useForm } from 'react-hook-form';
 
@@ -639,6 +640,8 @@ export default function LiveClasses() {
   const [activeClass, setActiveClass] = useState(null);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [editingClass, setEditingClass] = useState(null);
+  const [cancelConfirm, setCancelConfirm] = useState({ isOpen: false, classId: null });
+  const [isCancelling, setIsCancelling] = useState(false);
 
   // Socket init
   useEffect(() => {
@@ -707,14 +710,24 @@ export default function LiveClasses() {
     }
   };
 
-  const handleCancelClass = async (id) => {
-    if (confirm('Are you sure you want to cancel this class?')) {
-      try {
-        await cancelClassMutation.mutateAsync(id);
-      } catch (e) {
-        console.error('Failed to cancel class:', e);
-      }
+  const handleCancelClass = (id) => {
+    setCancelConfirm({ isOpen: true, classId: id });
+  };
+
+  const handleCancelConfirm = async () => {
+    setIsCancelling(true);
+    try {
+      await cancelClassMutation.mutateAsync(cancelConfirm.classId);
+    } catch (e) {
+      console.error('Failed to cancel class:', e);
+    } finally {
+      setIsCancelling(false);
+      setCancelConfirm({ isOpen: false, classId: null });
     }
+  };
+
+  const handleCancelDialogClose = () => {
+    if (!isCancelling) setCancelConfirm({ isOpen: false, classId: null });
   };
 
   const handleEditClass = (liveClass) => {
@@ -845,6 +858,19 @@ export default function LiveClasses() {
         editingClass={editingClass}
         courses={courses}
         isLoading={createClassMutation.isPending || updateClassMutation.isPending}
+      />
+
+      {/* Delete / Cancel confirmation dialog */}
+      <ConfirmationDialog
+        isOpen={cancelConfirm.isOpen}
+        title="Cancel Live Class"
+        message="Are you sure you want to cancel this live class? This action cannot be undone and all enrolled students will be notified."
+        confirmText="Yes, Cancel Class"
+        cancelText="Keep Class"
+        isDestructive={true}
+        isLoading={isCancelling}
+        onConfirm={handleCancelConfirm}
+        onCancel={handleCancelDialogClose}
       />
     </div>
   );

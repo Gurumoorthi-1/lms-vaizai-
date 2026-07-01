@@ -27,12 +27,14 @@ export default function Assignments() {
     user?.role !== 'STUDENT' || enrollments.some(e => e.courseId === c.id)
   );
 
-  // Initialize selected course if not set
+  // Initialize selected course if not set — depend on stable string, not array reference
+  const availableCourseIds = availableCourses.map(c => c.id).join(',');
   useEffect(() => {
     if (availableCourses.length > 0 && !selectedCourseId) {
       setSelectedCourseId(availableCourses[0].id);
     }
-  }, [availableCourses, selectedCourseId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [availableCourseIds, selectedCourseId]);
 
   // Retrieve assignments for selected course
   const { data: allAssignments = [], isLoading: assignmentsLoading } = useAssignments(
@@ -45,23 +47,24 @@ export default function Assignments() {
     : allAssignments;
 
   // Retrieve submission status for all assignments
+  // Use stable primitive (joined IDs) instead of array reference to avoid infinite loop
+  const assignmentIds = assignments.map(a => a.id).join(',');
+  const userId = user?._id || user?.id || '';
   useEffect(() => {
     async function fetchSubmissions() {
-      if (assignments.length === 0 || user?.role !== 'STUDENT') return;
+      if (!assignmentIds || user?.role !== 'STUDENT') return;
       setLoadingSubmissions(true);
       try {
         const submissionData = {};
         for (const asg of assignments) {
           const res = await api.getSubmissions(asg.id);
-          // Handle case where res is { submissions: [...] }
           const submissions = res.submissions || res;
-          // Handle both array and { submissions: [] } responses
-          const actualSubmissions = Array.isArray(submissions) 
-            ? submissions 
+          const actualSubmissions = Array.isArray(submissions)
+            ? submissions
             : submissions?.submissions || [];
-          
-          const sub = actualSubmissions.find(s => 
-            (s.studentId?._id || s.studentId) === (user._id || user.id)
+
+          const sub = actualSubmissions.find(s =>
+            (s.studentId?._id || s.studentId) === userId
           );
           if (sub) {
             submissionData[asg.id] = {
@@ -78,7 +81,8 @@ export default function Assignments() {
       }
     }
     fetchSubmissions();
-  }, [assignments, user]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [assignmentIds, userId]);
 
   // Socket.io setup for real-time updates
   useEffect(() => {

@@ -41,16 +41,19 @@ export default function Layout() {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
-  // Close user menu on outside click (simple implementation)
+  // Close user menu and notifications on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (isUserMenuOpen && !e.target.closest('.user-menu-container')) {
         setIsUserMenuOpen(false);
       }
+      if (isNotificationsOpen && !e.target.closest('.notifications-container')) {
+        setIsNotificationsOpen(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isUserMenuOpen]);
+  }, [isUserMenuOpen, isNotificationsOpen]);
 
   const handleLogoutConfirm = async () => {
     setIsLoggingOut(true);
@@ -304,12 +307,12 @@ export default function Layout() {
           <div className="flex items-center gap-3 md:gap-5">
             {/* Notifications Dropdown Container */}
             <div 
-              className="relative"
-              onMouseEnter={() => setIsNotificationsOpen(true)}
-              onMouseLeave={() => setIsNotificationsOpen(false)}
+              className="relative notifications-container"
             >
               <button
+                onClick={() => setIsNotificationsOpen(prev => !prev)}
                 className="relative p-2 rounded-full text-slate-500 hover:bg-slate-100 transition-colors focus:outline-none"
+                aria-label="Toggle notifications"
               >
                 <Bell className="h-5 w-5" />
                 {/* Unread Badge Mock */}
@@ -323,15 +326,15 @@ export default function Layout() {
             </div>
 
             {/* User Dropdown */}
-            <div className="relative user-menu-container hidden md:block">
+            <div className="relative user-menu-container">
               <button
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="flex items-center gap-2 p-1 pl-1 pr-3 rounded-full hover:bg-slate-50 transition-colors focus:outline-none"
+                className="flex items-center gap-2 p-1 md:pr-3 rounded-full hover:bg-slate-50 transition-colors focus:outline-none"
               >
                 <div className="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-semibold">
                   {user?.firstName?.[0] || 'U'}
                 </div>
-                <span className="text-sm font-medium text-slate-700">
+                <span className="hidden md:inline text-sm font-medium text-slate-700">
                   {user?.firstName}
                 </span>
               </button>
