@@ -64,27 +64,33 @@ const httpServer = createServer(app);
 initSocket(httpServer);
 
 const allowedOrigins = [
-  process.env.FRONTEND_URL,              // Production Vercel URL (from env)
-  'https://lms-vaizai.vercel.app',       // Hardcoded fallback
-  'https://lms-vaizai-*.vercel.app',     // Preview deployments
-  'http://localhost:5173',               // Vite dev server
-  'http://localhost:4173',               // Vite preview
+  process.env.FRONTEND_URL,
+  'https://lms-vaizai.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:4173'
 ].filter(Boolean);
-
-app.options('*', cors()); // Handle preflight for all routes
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, Postman, curl)
+    // Mobile apps, Postman, curl etc.
     if (!origin) return callback(null, true);
-    // Exact match
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    // Allow all Vercel preview deployments (lms-vaizai-*.vercel.app)
-    if (/^https:\/\/lms-vaizai(-[a-z0-9]+)?\.vercel\.app$/.test(origin)) return callback(null, true);
-    callback(new Error(`CORS blocked: ${origin}`));
+    
+    // Check if origin matches allowedOrigins or vercel patterns
+    const isAllowed = allowedOrigins.includes(origin) || 
+                      /^https:\/\/lms-vaizai(-[a-z0-9]+)?\.vercel\.app$/.test(origin);
+                      
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS blocked: ${origin}`));
+    }
   },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
 }));
+
+app.options('*', cors()); // Preflight handler
 
 app.use(express.json());
 
