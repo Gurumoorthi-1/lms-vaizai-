@@ -144,7 +144,7 @@ export default function NotificationsDrawer({ isOpen, onClose }) {
     <>
       {/* Dropdown */}
       <div 
-        className={`absolute right-0 top-full mt-2 z-[70] w-[360px] max-h-[80vh] rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col transition-all duration-200 origin-top-right overflow-hidden ${
+        className={`absolute right-[-80px] sm:right-0 top-full mt-2 z-[70] w-[90vw] sm:w-[360px] max-h-[80vh] rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col transition-all duration-200 origin-top-right overflow-hidden ${
           isOpen ? 'scale-100 opacity-100 pointer-events-auto' : 'scale-95 opacity-0 pointer-events-none'
         }`}
       >
