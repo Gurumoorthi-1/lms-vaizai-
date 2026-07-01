@@ -90,7 +90,8 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
 }));
 
-app.options('*', cors()); // Preflight handler
+// Enable pre-flight request handling for all routes via middleware instead of app.options('*')
+app.options('(.*)', cors());
 
 app.use(express.json());
 
