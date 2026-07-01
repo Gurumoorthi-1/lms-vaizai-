@@ -19,7 +19,7 @@ export const initSocket = (token) => {
 
   console.log('[Socket] Initializing with token:', !!token);
 
-  socket = io('http://localhost:5000', {
+  socket = io(import.meta.env.VITE_API_URL || 'http://localhost:5000', {
     auth: {
       token
     },

@@ -63,7 +63,22 @@ const httpServer = createServer(app);
 // Initialize Socket.io on the HTTP server
 initSocket(httpServer);
 
-app.use(cors());
+const allowedOrigins = [
+  process.env.FRONTEND_URL,           // Production Vercel URL
+  'http://localhost:5173',            // Vite dev server
+  'http://localhost:4173',            // Vite preview
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, Postman, curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS blocked: ${origin}`));
+  },
+  credentials: true,
+}));
+
 app.use(express.json());
 
 // Expose uploads directory statically so files can be downloaded

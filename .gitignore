@@ -16,6 +16,11 @@ dist-ssr
 .env
 server/.env
 
+# Uploaded files (not stored in git)
+server/uploads/
+server/secure-uploads/
+
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

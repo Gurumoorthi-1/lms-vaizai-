@@ -144,7 +144,7 @@ export default function Certificates() {
       // Handle relative URL (from server storage)
       let pdfUrl = cert.pdfUrl;
       if (pdfUrl.startsWith('/')) {
-        pdfUrl = `http://localhost:5000${pdfUrl}`;
+        pdfUrl = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${pdfUrl}`;
       }
       
       const response = await fetch(pdfUrl);
