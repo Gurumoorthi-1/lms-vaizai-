@@ -90,9 +90,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
 }));
 
-// Enable pre-flight request handling for all routes via middleware instead of app.options('*')
-app.options('(.*)', cors());
-
 app.use(express.json());
 
 // Expose uploads directory statically so files can be downloaded
